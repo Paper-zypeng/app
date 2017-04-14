@@ -2,87 +2,176 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="viewport"
+          content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
     <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
     <title>Hello APP</title>
-    <link rel="stylesheet" type="text/css" href="./css/api.css" />
+    <link rel="stylesheet" type="text/css" href="./css/api.css"/>
     <style type="text/css">
-    html,body{
-        height: 100%;
-    }
-    #wrap{
-        height: 100%;
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: flex;
-        -webkit-box-orient: vertical;
-        -webkit-flex-flow: column;
-               flex-flow: column;
-    }
-    #header{
-        text-align: center; background-color: #81a9c3; color: #fff;
-        width: 100%;
-    }
-    #header h1{
-        font-size: 20px; height: 44px; line-height: 44px; margin: 0em; color: #fff;
-    }
-    #main{
-        -webkit-box-flex: 1; 
-        -webkit-flex: 1;
-        flex: 1;
-    }
-    #footer{
-        height: 30px; line-height: 30px;
-        background-color: #81a9c3; 
-        width: 100%;
-        text-align: center;
-    }
-    #footer h5{
-        color: white;
-    }
-    .con{font-size: 28px; text-align: center;}
+        html, body {
+            height: 100%;
+        }
+
+        #wrap {
+            height: 100%;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-flex-flow: column;
+            flex-flow: column;
+        }
     </style>
 </head>
 <body>
-    <div id="wrap">
-        <div id="header">
-            <h1>APICloud</h1>
-        </div>
-        <div id="main">
-                
-        </div>
-        <div id="footer">
-            <h5>Copyright &copy;<span id="year"></span> </h5>
-        </div>
-    </div>
+<div id="wrap">
+</div>
 </body>
 <script type="text/javascript" src="./script/api.js"></script>
 <script type="text/javascript">
-    apiready = function(){
-		console.log("Hello APICloud");
-
-        var header = $api.byId('header');
-        //适配iOS 7+，Android 4.4+状态栏
-        $api.fixStatusBar(header);
-
-        var headerPos = $api.offset(header);
-        var main = $api.byId('main');
-        var mainPos = $api.offset(main);
-        api.openFrame({
-            name: 'main',
-            url: 'html/main.html',
-            bounces: true,
-            rect: {
-                x: 0,
-                y: headerPos.h,
-                w: 'auto',
-                h: mainPos.h
+    apiready = function () {
+        var NVTabBar = api.require('NVTabBar');
+        NVTabBar.open({
+            styles: {
+                bg: '#fff',
+                h: 60,
+                dividingLine: {
+                    width: 0.5,
+                    color: '#F0F0F0'
+                },
+                badge: {
+                    bgColor: '#FB3F54',
+                    numColor: '#fff',
+                    size: 6.0,
+                    fontSize: 10 //数字类型,设置徽章字体大小,默认10。注意:仅支持iOS。
+                }
+            },
+            items: [{
+                w: api.winWidth / 3.0,
+                bg: {
+                    marginB: 0,
+                    image: 'rgba(0,0,0,0)'
+                },
+                iconRect: {
+                    w: 25.0,
+                    h: 25.0,
+                },
+                icon: {
+                    normal: 'widget://image/movie.png',
+                    highlight: 'widget://image/movie.png',
+                    selected: 'widget://image/movie_sel.png'
+                },
+                title: {
+                    text: '热映',
+                    size: 12.0,
+                    normal: '#696969',
+                    selected: '#FB3F54',
+                    marginB: 6.0
+                }
+            }, {
+                w: api.winWidth / 3.0,
+                bg: {
+                    marginB: 0,
+                    image: 'rgba(0,0,0,0)'
+                },
+                iconRect: {
+                    w: 25.0,
+                    h: 25.0,
+                },
+                icon: {
+                    normal: 'widget://image/find.png',
+                    highlight: 'widget://image/find.png',
+                    selected: 'widget://image/find_sel.png'
+                },
+                title: {
+                    text: '发现',
+                    size: 12.0,
+                    normal: '#696969',
+                    selected: '#FB3F54',
+                    marginB: 6.0
+                }
+            }, {
+                w: api.winWidth / 3.0,
+                bg: {
+                    marginB: 0,
+                    image: 'rgba(0,0,0,0)'
+                },
+                iconRect: {
+                    w: 25.0,
+                    h: 25.0,
+                },
+                icon: {
+                    normal: 'widget://image/me.png',
+                    highlight: 'widget://image/me.png',
+                    selected: 'widget://image/me_sel.png'
+                },
+                title: {
+                    text: '我的',
+                    size: 12.0,
+                    normal: '#696969',
+                    selected: '#FB3F54',
+                    marginB: 6.0
+                }
+            }],
+            selectedIndex: 0
+        }, function (ret, err) {
+            var rel = ret.index;
+            if (rel == 0 || ret.eventType == 'show') {
+                api.openFrame({
+                    name: 'movie',
+                    url: 'html/movie/movie.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: api.winWidth,
+                        h: api.winHeight - 60
+                    },
+                    pageParam: {name: 'movie'},
+                    bounces: true
+                });
+            } else {
+                api.closeFrame({
+                    name: 'movie'
+                });
+            }
+            if (rel == 1) {
+                alert(rel)
+                api.openFrame({
+                    name: 'find',
+                    url: 'html/find/find.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: api.winWidth,
+                        h: api.winHeight - 60
+                    },
+                    pageParam: {name: 'find'},
+                    bounces: true
+                });
+            } else {
+                api.closeFrame({
+                    name: 'find'
+                });
+            }
+            if (rel == 2) {
+                api.openFrame({
+                    name: 'me',
+                    url: 'html/me/me.html',
+                    rect: {
+                        x: 0,
+                        y: 0,
+                        w: api.winWidth,
+                        h: api.winHeight - 60
+                    },
+                    pageParam: {name: 'me'},
+                    bounces: true
+                });
+            } else {
+                api.closeFrame({
+                    name: 'me'
+                });
             }
         });
-
-        var year = $api.byId('year');
-        year.innerHTML = new Date().getFullYear();
-
-    };
+    }
 </script>
 </html>
